@@ -6,11 +6,11 @@ import { darkTheme, lightTheme } from "./redux-toolkit/theme/theme";
 
 export default function App() {
   // get theme from store
-  const theme = useSelector((state) => state.theme);
-  console.log("🚀 ~ file: App.js:10 ~ App ~ theme:", theme);
+  const isDarkTheme = useSelector((state) => state.theme.darkTheme);
+  console.log("🚀 ~ file: App.js:10 ~ App ~ theme:", isDarkTheme);
 
   return (
-    <ThemeProvider theme={theme.darkTheme ? darkTheme : lightTheme}>
+    <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
       <MainLayout />
     </ThemeProvider>
   );

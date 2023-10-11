@@ -1,32 +1,27 @@
 import { useSelector, useDispatch } from "react-redux";
-import { FormGroup, FormControlLabel, Switch } from "@mui/material";
-
 import { toggleTheme } from "../redux-toolkit/theme/ThemeSlice";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import React, { useCallback } from "react";
+import { IconButton } from "@mui/material";
 
-// ToggleSwitch component
 const ToggleThemeBox = () => {
-  // get theme from store
-  const theme = useSelector((state) => state.theme);
-
-  // initialize dispatch variable
+  const isDarkTheme = useSelector((state) => state.theme.darkTheme);
   const dispatch = useDispatch();
+
+  // useCallback hook is used to memoize the changeTheme function
+  const changeTheme = useCallback(() => {
+    dispatch(toggleTheme());
+  }, [dispatch]);
+
   return (
-    <div
-      style={{
-        marginLeft: "10px",
-      }}
-    >
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={theme.darkTheme}
-              onChange={() => dispatch(toggleTheme())}
-            />
-          }
-        />
-      </FormGroup>
-    </div>
+    <>
+      <div style={{ marginLeft: "10px" }}>
+        <IconButton sx={{ ml: 1 }} onClick={changeTheme} color="inherit">
+          {isDarkTheme === true ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </div>
+    </>
   );
 };
 

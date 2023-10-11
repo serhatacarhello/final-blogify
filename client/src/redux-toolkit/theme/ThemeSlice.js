@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const savedTheme = JSON.parse(localStorage.getItem("theme"));
 
 export const themeSlice = createSlice({
