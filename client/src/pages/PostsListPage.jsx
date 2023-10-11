@@ -7,11 +7,11 @@ import gridThree from "../images/grid_three.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Hidden from "@mui/material/Hidden";
 import Loading from "../components/Loading";
-import { fetchPostsAsync } from "../redux-toolkit/reducers/PostSlice";
+import { fetchPostsAsync } from "../redux-toolkit/posts/PostSlice";
 
 export default function PostsListPage({ posts }) {
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(fetchPostsAsync());
   }, [dispatch]);

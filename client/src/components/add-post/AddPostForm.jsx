@@ -22,7 +22,7 @@ import { useDispatch } from "react-redux";
 import AddContent from "./AddContentField";
 // import { createPost } from "../../redux/actions/postActions";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { createPostAsync } from "../../redux-toolkit/reducers/PostSlice";
+import { createPostAsync } from "../../redux-toolkit/posts/PostSlice";
 
 const uploadOptions = {
   apiKey: "public_W142iFxETsEJcJxodwWKvCXw2cQ1", // This is your API key.

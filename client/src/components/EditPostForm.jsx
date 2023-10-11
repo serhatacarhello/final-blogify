@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import MarkDownEditor from "./add-post/MarkDownEditor";
-import { updatePostAsync } from "../redux-toolkit/reducers/PostSlice";
+import { updatePostAsync } from "../redux-toolkit/posts/PostSlice";
 const apiKey = process.env.REACT_APP_UPLOADER_API_KEY;
 // console.log("🚀 ~ file: EditPostForm.jsx:22 ~ apiKey:", apiKey);
 

@@ -20,7 +20,7 @@ import MDEditor from "@uiw/react-md-editor";
 import {
   deletePostAsync,
   fetchSinglePostAsync,
-} from "../redux-toolkit/reducers/PostSlice";
+} from "../redux-toolkit/posts/PostSlice";
 
 export default function PostDetailsPage() {
   const currentPost = useSelector((store) => store.posts.currentPost);
