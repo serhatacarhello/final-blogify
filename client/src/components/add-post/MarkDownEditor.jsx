@@ -75,6 +75,7 @@ export default function MarkDownEditor({ content, setContent, defaultValue }) {
         onChange={(val) => {
           setContent(val);
         }}
+        
       />
     </Box>
   );

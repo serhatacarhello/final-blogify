@@ -1,23 +1,23 @@
 // import * as api from "../../api/index";
 // import * as types from "./types";
 
-// // action creator
+// action creator
 
-// // export const fetchPosts = () => {
-// //   return {
-// //     type: types.FETCH_POSTS,
-// //     payload: [],
-// //   };
-// // };
+// export const fetchPosts = () => {
+//   return {
+//     type: types.FETCH_POSTS,
+//     payload: [],
+//   };
+// };
 
-// // export const createPost = () => {
-// //   return {
-// //     type: types.CREATE_POST,
-// //     payload: post,
-// //   };
-// // };
+// export const createPost = () => {
+//   return {
+//     type: types.CREATE_POST,
+//     payload: post,
+//   };
+// };
 
-// // add dispatch
+// add dispatch
 
 // export const fetchPosts = () => async (dispatch) => {
 //   try {
@@ -73,8 +73,8 @@
 // };
 
 // export const updatePost = (id, updatedPost) => async (dispatch) => {
-//   // console.log("🚀 ~ file: postActions.js:76 ~ updatePost ~ id:", id)
-//   // console.log("🚀 ~ file: postActions.js:76 ~ updatePost ~ updatedPost:", updatedPost)
+// console.log("🚀 ~ file: postActions.js:76 ~ updatePost ~ id:", id)
+// console.log("🚀 ~ file: postActions.js:76 ~ updatePost ~ updatedPost:", updatedPost)
 //   try {
 //     const { data } = await api.updatePost(id, updatedPost);
 //     dispatch({
