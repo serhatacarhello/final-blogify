@@ -22,18 +22,15 @@ app.get("/", (req, res) =>
 
 app.use("/posts", postRoutes);
 
-const port = process.env.PORT || 5000;
-const connectionUrl = process.env.CONNECTION_URL;
-
 // create a port
 const PORT = process.env.PORT || 5000;
 
 mongoose
-  .connect(connectionUrl, {
+  .connect(process.env.CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () => console.log(`Server is running on port: ${port}`));
+    app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
   })
   .catch((error) => console.log("mongodb connection error", error.message));
