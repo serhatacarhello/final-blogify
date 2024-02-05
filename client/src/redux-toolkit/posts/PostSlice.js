@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+let apiEndpoint;
 
-const apiEndpoint = "http://localhost:5000/posts/";
+if (process.env.REACT_APP_HOST_NAME) {
+  apiEndpoint = `${process.env.REACT_APP_HOST_NAME}/posts/`;
+} else {
+  apiEndpoint = "http://localhost:5000/posts/";
+}
 
 // async thunk
 export const fetchPostsAsync = createAsyncThunk(
