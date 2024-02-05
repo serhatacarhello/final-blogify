@@ -51,6 +51,7 @@ export default function PostDetailsPage() {
     dispatch(deletePostAsync(id));
     navigate("/");
   };
+
   console.log("currentPost?.image ", currentPost?.image);
   if (status === "loading" && !currentPost) return <Loading />;
 
@@ -116,7 +117,8 @@ export default function PostDetailsPage() {
           <Box maxWidth={"lg"}>
             <img
               style={{
-                maxWidth: "100%",
+                width: "100%",
+                maxHeight: "100%",
                 borderRadius: 5,
                 marginTop: 3,
                 marginBottom: 4,
@@ -128,7 +130,12 @@ export default function PostDetailsPage() {
           {/* content */}
           <MDEditor.Markdown
             source={currentPost?.content}
-            style={{ whiteSpace: "pre-wrap" }}
+            style={{
+              whiteSpace: "pre-wrap",
+              padding: "15px",
+              borderRadius: "5px",
+              textIndent: "10px",
+            }}
           />
         </>
       )}

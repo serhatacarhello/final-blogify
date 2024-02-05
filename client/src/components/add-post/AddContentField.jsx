@@ -13,14 +13,13 @@ export default function AddContentField({
   setContent,
   contentMode,
   setContentMode,
+  control,
 }) {
   const handleCancel = () => {
-    console.log("iptal");
     setContent("");
     setContentMode(false);
   };
   const handleSubscribe = () => {
-    console.log("ekle butonu");
     setContentMode(false);
   };
 
@@ -43,7 +42,11 @@ export default function AddContentField({
           </DialogContentText>
 
           {/* MarkdownEditor component */}
-          <MarkDownEditor content={content} setContent={setContent} />
+          <MarkDownEditor
+            content={content}
+            control={control}
+            setContent={setContent}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} variant="outlined" color="error">

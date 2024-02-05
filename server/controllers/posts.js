@@ -28,6 +28,7 @@ export async function createPost(req, res) {
   const post = req.body;
   // create a newPost obj. with Post model
   const newPost = new Post(post);
+  console.log("🚀 ~ createPost ~ post:", post);
   try {
     // save newPost to db
     await newPost.save();

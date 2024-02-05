@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import FileBase64 from "react-file-base64";
 import {
   Button,
   Input,
@@ -11,22 +12,20 @@ import {
   TextField,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { UploadButton } from "@bytescale/upload-widget-react";
 import { useDispatch } from "react-redux";
 
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import MarkDownEditor from "./add-post/MarkDownEditor";
 import { updatePostAsync } from "../redux-toolkit/posts/PostSlice";
-const apiKey = process.env.REACT_APP_UPLOADER_API_KEY;
-// console.log("🚀 ~ file: EditPostForm.jsx:22 ~ apiKey:", apiKey);
-
-const uploadOptions = {
-  apiKey,
-  maxFileCount: 1,
-};
 
 // tags
 const tags = ["fun", "programming", "health", "science"];
+const allowedImageFormats = [
+  "image/jpg",
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
 
 //schema
 const postSchema = yup.object().shape({
@@ -35,39 +34,31 @@ const postSchema = yup.object().shape({
   tag: yup.mixed().oneOf(tags).required(),
 });
 
-// post={post} closeEditMode={closeEditMode}
-
 export default function EditPostForm(props) {
   const { post, handleClose } = props;
-
-  const [file, setFile] = useState({
-    fileUrl: post?.image,
-  });
+  const [file, setFile] = useState(null);
+  const [fileError, setFileError] = useState("");
   const [content, setContent] = useState(post?.content);
 
   const dispatch = useDispatch();
-
-  const fileName = file?.fileUrl;
-  const maxLength = 30;
-  const shortenedFileName =
-    fileName && fileName.length > maxLength
-      ? fileName.substring(0, maxLength) + "..."
-      : fileName;
-
   const {
     register,
     handleSubmit,
     control,
     reset,
     formState: { errors, isSubmitSuccessful },
+    setValue,
   } = useForm({
     resolver: yupResolver(postSchema),
+    defaultValues: {
+      title: post?.title,
+      subtitle: post?.subtitle,
+      content: post?.content,
+    },
   });
 
-  const currentImage = post?.image;
-
   const onSubmit = (data) => {
-    const image = file?.fileUrl || currentImage;
+    const image = file || post?.image;
     const postContent = content || post?.content;
 
     const updatedPost = {
@@ -93,6 +84,20 @@ export default function EditPostForm(props) {
     setFile(null);
     setContent(null);
   }, [isSubmitSuccessful, reset]);
+
+  const handleFileDone = ({ base64, file }) => {
+    const isAllowedFormat = allowedImageFormats.includes(file.type);
+
+    if (isAllowedFormat) {
+      setFile(base64);
+      setValue("image", base64);
+      setFileError("");
+    } else {
+      setFileError(
+        "Geçersiz dosya formatı. Lütfen JPG,JPEG, PNG veya GIF kullanın."
+      );
+    }
+  };
 
   return (
     <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
@@ -146,28 +151,30 @@ export default function EditPostForm(props) {
         content={content}
         setContent={setContent}
         defaultValue={post?.content}
+        control={control}
       />
 
       <Stack alignItems={"center"} my={3}>
-        <UploadButton
-          options={uploadOptions}
-          onComplete={(file) => setFile(file[0])}
-        >
-          {({ onClick }) => (
-            <Button
-              variant="outlined"
-              color="info"
-              onClick={onClick}
-              startIcon={<CloudUploadIcon />}
-            >
-              Dosya {file ? "yüklendi" : "yükle..."}
-            </Button>
-          )}
-        </UploadButton>
-        {!file?.fileUrl && post?.image && (
-          <p>Secili&nbsp;dosya:{`${post.image}`} </p>
+        {post && !file && (
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <p>Seçili resim</p>
+            <img src={post?.image} width={50} alt="post file" />
+            <br />
+          </Stack>
         )}
-        {file && <p>Secili&nbsp;dosya:{`${shortenedFileName}`} </p>}
+        {errors.image && (
+          <>
+            <p>{errors.image?.message}</p>
+            <br />
+          </>
+        )}
+        {fileError && <p style={{ marginBottom: "5px" }}>{fileError} </p>}
+        <FileBase64 multiple={false} onDone={handleFileDone} />
       </Stack>
       {/* action buttons */}
       <Stack direction={"row"} gap={2} justifyContent={"flex-end"} mt={2}>
@@ -178,7 +185,6 @@ export default function EditPostForm(props) {
           color={"primary"}
           variant="contained"
           type="submit"
-          // onClick={() => handleSubmit(onSubmit)}
           endIcon={<SendIcon />}
         >
           Güncelle

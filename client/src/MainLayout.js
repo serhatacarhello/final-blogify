@@ -8,10 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import PostDetailsPage from "./pages/PostDetailsPage";
 import { fetchPostsAsync } from "./redux-toolkit/posts/PostSlice";
 import Header from "./components/header";
+import NotFound from "./pages/NotFound";
 
 function MainLayout({ theme, setTheme, toggleColorMode }) {
   const posts = useSelector((state) => state.posts.posts);
   const memoizedPosts = React.useMemo(() => posts, [posts]);
+
   // modal process
   const [open, setOpen] = React.useState(false);
 
@@ -50,6 +52,7 @@ function MainLayout({ theme, setTheme, toggleColorMode }) {
                 element={<PostsListPage posts={memoizedPosts} />}
               />
               <Route path="posts/:id" element={<PostDetailsPage />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Grid>
           <AddPostForm open={open} handleClose={handleClose} />

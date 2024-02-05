@@ -15,7 +15,9 @@ export const fetchPostsAsync = createAsyncThunk(
 export const createPostAsync = createAsyncThunk(
   "posts/createPost",
   async (post) => {
+    console.log("🚀 ~ post:", post);
     const { data } = await axios.post(apiEndpoint, post);
+    console.log("🚀 ~ data:", data);
     return data;
   }
 );

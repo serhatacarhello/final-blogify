@@ -7,8 +7,6 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import noImage from "../images/noimage.svg";
 import { Box, Chip, Stack } from "@mui/material";
@@ -19,14 +17,14 @@ export default function Post(props) {
   const { _id, title, subtitle, content, tag, image, createdAt } = props;
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, width: "100%", height: "100%" }}>
       <CardMedia
+        width={"100%"}
         component="img"
         height="194"
-        image={image || noImage}
         title="Resim"
         alt={"image"}
-        src="img"
+        src={image || noImage}
       />
       <CardHeader
         avatar={
@@ -37,7 +35,7 @@ export default function Post(props) {
         title={title}
         subheader={convertRelativeTime(createdAt)}
       />
-      <CardContent>
+      <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="h6" component={"p"}>
           {title}
         </Typography>
@@ -47,7 +45,6 @@ export default function Post(props) {
         <Typography variant="body2">
           {content?.length > 250 ? content.substring(0, 250) + "..." : content}
         </Typography>
-        <Chip label={`# ${tag}`} sx={{ my: 2 }} variant="outlined" />
       </CardContent>
       <Stack
         direction={"row"}
@@ -56,12 +53,7 @@ export default function Post(props) {
         padding={1}
       >
         <Box>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
+          <Chip label={`# ${tag}`} sx={{ my: 2 }} variant="outlined" />
         </Box>
 
         <Box aria-label="show more">

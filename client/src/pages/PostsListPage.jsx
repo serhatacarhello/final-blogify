@@ -37,8 +37,8 @@ export default function PostsListPage({ posts }) {
   return (
     <>
       {/* layout Shifter */}
-      <Hidden mdDown={!isMdScreen}>
-        <Container>
+      <Container sx={{ marginBottom: "10px" }}>
+        <Hidden mdDown={!isMdScreen}>
           <Stack
             direction="row"
             justifyContent="flex-end"
@@ -72,11 +72,17 @@ export default function PostsListPage({ posts }) {
               />
             </Button>
           </Stack>
-        </Container>
-      </Hidden>
+        </Hidden>
+      </Container>
       <Grid container spacing={2}>
         {posts?.map((post) => (
-          <Grid item key={post?._id} xs={12} sm={6} md={calculateMd()}>
+          <Grid
+            item
+            key={post?._id}
+            xs={12}
+            sm={6}
+            md={calculateMd()}
+          >
             <Stack
               direction={"row"}
               justifyContent={"center"}

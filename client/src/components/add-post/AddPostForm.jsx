@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import FileBase64 from "react-file-base64";
 import {
   Button,
   Dialog,
@@ -16,22 +17,19 @@ import {
   TextField,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { UploadButton } from "@bytescale/upload-widget-react";
 import { useDispatch } from "react-redux";
-
 import AddContent from "./AddContentField";
-// import { createPost } from "../../redux/actions/postActions";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { createPostAsync } from "../../redux-toolkit/posts/PostSlice";
-
-const uploadOptions = {
-  apiKey: "public_W142iFxETsEJcJxodwWKvCXw2cQ1", // This is your API key.
-  maxFileCount: 1,
-};
 
 // tags
 const tags = ["fun", "programming", "health", "science"];
-
+const allowedImageFormats = [
+  "image/jpg",
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
 //schema
 const postSchema = yup.object().shape({
   title: yup.string().required(),
@@ -42,17 +40,11 @@ const postSchema = yup.object().shape({
 export default function AddPostForm(props) {
   const { open, handleClose } = props;
   const [file, setFile] = useState(null);
+  const [fileError, setFileError] = useState("");
   const [contentMode, setContentMode] = useState(false);
   const [content, setContent] = useState("");
 
   const dispatch = useDispatch();
-
-  const fileName = file?.fileUrl;
-  const maxLength = 30;
-  const shortenedFileName =
-    fileName && fileName.length > maxLength
-      ? fileName.substring(0, maxLength) + "..."
-      : fileName;
 
   const {
     register,
@@ -60,15 +52,15 @@ export default function AddPostForm(props) {
     control,
     reset,
     formState: { errors, isSubmitSuccessful },
+    setValue,
   } = useForm({
     resolver: yupResolver(postSchema),
   });
 
   const onSubmit = (data) => {
     //Dispatch create post action
-    const image = file?.fileUrl;
-    const newPost = { ...data, image: image, content: content };
-    console.log("🚀 ~ file: AddPostForm.jsx:71 ~ onSubmit ~ newPost:", newPost);
+    if (fileError !== "") return;
+    const newPost = { ...data, image: file, content: content };
     dispatch(createPostAsync(newPost));
     clearForm();
   };
@@ -87,6 +79,20 @@ export default function AddPostForm(props) {
     setContent(null);
     setContentMode(false);
   }, [isSubmitSuccessful, reset]);
+
+  const handleFileDone = ({ base64, file }) => {
+    const isAllowedFormat = allowedImageFormats.includes(file.type);
+
+    if (isAllowedFormat) {
+      setFile(base64);
+      setValue("image", base64);
+      setFileError("");
+    } else {
+      setFileError(
+        "Geçersiz dosya formatı. Lütfen JPG,JPEG, PNG veya GIF kullanın."
+      );
+    }
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -142,28 +148,24 @@ export default function AddPostForm(props) {
           {setContentMode && (
             <AddContent
               content={content}
+              control={control}
               setContent={setContent}
               contentMode={contentMode}
               setContentMode={setContentMode}
             />
           )}
           <Stack alignItems={"center"}>
-            <UploadButton
-              options={uploadOptions}
-              onComplete={(file) => setFile(file[0])}
-            >
-              {({ onClick }) => (
-                <Button
-                  variant="outlined"
-                  color="info"
-                  onClick={onClick}
-                  startIcon={<CloudUploadIcon />}
-                >
-                  Dosya {file ? "yüklendi" : "yükle..."}
-                </Button>
-              )}
-            </UploadButton>
-            {file && <p>Secili&nbsp;dosya:{`${shortenedFileName}`} </p>}
+            {errors.image && (
+              <>
+                <p>{errors.image.message}</p>
+                <br />
+              </>
+            )}
+            {fileError && <p style={{ marginBottom: "5px" }}>{fileError} </p>}
+            {<h4>{!file ? `Lütfen  dosya seciniz.` : "Dosya yüklendi."}</h4>}
+            <br />
+            {/* destructure base64 prop  */}
+            <FileBase64 multiple={false} onDone={handleFileDone} />
           </Stack>
         </form>
       </DialogContent>
